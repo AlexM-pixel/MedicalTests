@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "323590832991",
+    "firebase_url": "https://medicaltests-a7e4f.firebaseio.com",
+    "project_id": "medicaltests-a7e4f",
+    "storage_bucket": "medicaltests-a7e4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323590832991:android:b90c4b01b198bcfe2d6cea",
+        "android_client_info": {
+          "package_name": "com.example.medicaltests"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323590832991-ol04sba043g0q5q57pbebiumjo5eh2h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv9iTI0MnnqeoBmLanrt37tsNqmZrnCIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323590832991-ol04sba043g0q5q57pbebiumjo5eh2h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

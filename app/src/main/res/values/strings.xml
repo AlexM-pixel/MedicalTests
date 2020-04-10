@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MedicalTests</string>
+    <string name="status" />
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="create_account">create_account</string>
+    <string name="sign_in">sign_in</string>
+    <string name="EnterName">Введите ваше Имя</string>
+    <string name="born_Date">Введите дату рождения</string>
 </resources>
