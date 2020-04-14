@@ -7,4 +7,6 @@
     <string name="sign_in">sign_in</string>
     <string name="EnterName">Введите ваше Имя</string>
     <string name="born_Date">Введите дату рождения</string>
+    <string name="signOut_button">Выйти из аккаунта</string>
+    <string name="activity_2">Activity 2</string>
 </resources>

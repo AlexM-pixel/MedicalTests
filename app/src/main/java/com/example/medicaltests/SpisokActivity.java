@@ -15,9 +15,8 @@ public class SpisokActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spisok);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setResult(RESULT_OK);
-        Button button= findViewById(R.id.button_out);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonOut= findViewById(R.id.button_out);
+        buttonOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
@@ -25,5 +24,11 @@ public class SpisokActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }

@@ -3,8 +3,10 @@ package com.example.medicaltests;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.medicaltests.dialogues.RecoveryDialog;
+import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,12 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    public static final String MAIL= "email";
+    int count = 0;
     private TextView mStatusTextView;
-    private EditText mEmailField;
+    private EditText emailField;
     private EditText mPasswordField;
-ProgressBar ProgressBar;
+    ProgressBar ProgressBar;
     FirebaseAuth mAuth;
+    FragmentManager fm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,14 +39,15 @@ ProgressBar ProgressBar;
         getSupportActionBar().hide();
         ProgressBar = findViewById(R.id.progressBar);
         mStatusTextView = findViewById(R.id.status);
-        mEmailField = findViewById(R.id.fieldEmail);
+        emailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
 
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        updateUI();
+        fm = getSupportFragmentManager();
+
     }
 
 
@@ -50,13 +57,15 @@ ProgressBar ProgressBar;
         // Check if user is signed in (non-null) and update UI accordingly.
 
     }
-    // [END on_start_check_user]
 
     private void createAccount(String email, String password) {
-        if (!validateForm()) {
+        if (!Validation.getInstance().validEmail(email, emailField)) {
             return;
         }
-       ProgressBar.setVisibility(View.VISIBLE);
+        if (!Validation.getInstance().validPassword(password, mPasswordField, fm)) {
+            return;
+        }
+        ProgressBar.setVisibility(View.VISIBLE);
 
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -65,14 +74,13 @@ ProgressBar ProgressBar;
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI();
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Ошибка Авторизации",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI();
                         }
                         ProgressBar.setVisibility(View.INVISIBLE);
                     }
@@ -80,57 +88,46 @@ ProgressBar ProgressBar;
         // [END create_user_with_email]
     }
 
-    private void signIn(String email, String password) {
-        if (!validateForm()) {
-            return;
+
+    private void signIn(final String email, String password) {
+
+        if (email.equals("")) {
+            emailField.setHintTextColor(Color.RED);
+            emailField.setHint("write email !");
         }
-        ProgressBar.setVisibility(View.VISIBLE);
-        // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // [START_EXCLUDE]
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText("не вышло");
-                        }
-                        ProgressBar.setVisibility(View.INVISIBLE);
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END sign_in_with_email]
-    }
-
-    private boolean validateForm() {                                                                //  доделать валидацию
-        boolean valid = true;
-
-        String email = mEmailField.getText().toString();
-        if (email.length()==0) {
-            mEmailField.setError("write email");
-            valid = false;
+        if (password.equals("")) {
+            mPasswordField.setHintTextColor(Color.RED);
+            mPasswordField.setHint("write password !");
         } else {
-            mEmailField.setError(null);
+            ProgressBar.setVisibility(View.VISIBLE);
+            // [START sign_in_with_email]
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                updateUI();
+                                count = 0;
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(MainActivity.this, "Ошибка Авторизации",
+                                        Toast.LENGTH_SHORT).show();
+                                count++;
+                                if (count == 3) {       //если пароль или почта введены не правильно 3 раза подряд
+                                    RecoveryDialog recoveryDialog = new RecoveryDialog();
+                                    Bundle agruments = new Bundle();
+                                    agruments.putString(MAIL,email);                   // передал адрес почты через аргументы
+                                    recoveryDialog.setArguments(agruments);
+                                    recoveryDialog.show(fm,"passw");
+                                }
+                            }
+                            ProgressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+            // [END sign_in_with_email]
         }
 
-        String password = mPasswordField.getText().toString();
-        if (password.length()==0) {
-            mPasswordField.setError("write password");
-            valid = false;
-        } else {
-            mPasswordField.setError(null);
-        }
-
-        return valid;
     }
 
     @Override
@@ -141,24 +138,25 @@ ProgressBar ProgressBar;
         }
     }
 
-    void updateUI(FirebaseUser user) {
+    void updateUI() {
         ProgressBar.setVisibility(View.INVISIBLE);
+        FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Intent intent = new Intent(MainActivity.this, SpisokActivity.class);
+            Intent intent = new Intent(this, SpisokActivity.class);
             startActivityForResult(intent, 1);
         }
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.emailCreateAccountButton:
-                createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+                createAccount(emailField.getText().toString(), mPasswordField.getText().toString());
                 break;
             case R.id.emailSignInButton:
-                signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+                signIn(emailField.getText().toString(), mPasswordField.getText().toString());
                 break;
         }
     }
-
 }
