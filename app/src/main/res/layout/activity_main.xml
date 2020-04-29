@@ -1,135 +1,106 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8EDED"
-    android:orientation="vertical"
-    android:weightSum="4">
+    android:background="#59DFFF"
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/frame_signUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:text="@string/medicaltests"
+            android:textColor="#ffff"
+            android:textSize="48sp" />
+
+    </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/show_menu"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@drawable/radius_formenu"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="44dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp"
-            android:src="@drawable/ic_person_add_black_24dp" />
-
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="email and password"
-            android:theme="@style/MyTitleText" />
-
-        <TextView
-            android:id="@+id/status"
-            style="@style/TextDescription"
-            android:text="@string/status" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/EnterName"
-            android:layout_marginStart="8dp"
-            android:layout_gravity="left"/>
-
-        <EditText
-            style="@style/MyButtons"
-            android:id="@+id/entry_name"
+        <Button
+            android:id="@+id/signUp_Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/born_Date" />
-
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#EDEAF1"
-        android:gravity="center_vertical">
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="38dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/radius"
+            android:elevation="8dp"
+            android:text="@string/signup"
+            android:textColor="#ffff"
+            android:textSize="24sp" />
 
         <LinearLayout
-            android:id="@+id/emailPasswordFields"
+            android:id="@+id/liner_for_signIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/signIn_Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="38dp"
+                android:layout_marginEnd="38dp"
+                android:background="@drawable/radius"
+                android:elevation="8dp"
+                android:text="@string/insert"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/fieldEmail"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="18dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/fieldPassword"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="18dp"
                 android:hint="@string/password"
                 android:inputType="textPassword" />
+
+
         </LinearLayout>
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/emailPasswordButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/emailPasswordFields"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
 
-            <Button
-                android:id="@+id/emailSignInButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@string/sign_in"
-                android:theme="@style/MyButtons" />
-
-            <Button
-                android:id="@+id/emailCreateAccountButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@string/create_account"
-                android:theme="@style/MyButtons"
-                 />
-        </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

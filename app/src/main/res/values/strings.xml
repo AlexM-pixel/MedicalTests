@@ -9,4 +9,11 @@
     <string name="born_Date">Введите дату рождения</string>
     <string name="signOut_button">Выйти из аккаунта</string>
     <string name="activity_2">Activity 2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="medicaltests">MedicalTests</string>
+    <string name="insert">войти</string>
+    <string name="signup">регистрация</string>
+    <string name="pol">выберите пол:</string>
 </resources>

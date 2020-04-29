@@ -34,6 +34,7 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:elevation">4dp</item>
         <item name="android:buttonCornerRadius" tools:targetApi="p">5dp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>

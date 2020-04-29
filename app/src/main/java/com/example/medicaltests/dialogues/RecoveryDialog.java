@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.medicaltests.MainActivity;
 import com.example.medicaltests.R;
-import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
