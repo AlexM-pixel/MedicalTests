@@ -30,7 +30,7 @@ public class Validation {
 
 
     public boolean validEmail(String mail, EditText editMail) {
-        String valid = "^[a-zA-Z0-9]{1,}[@]{1}[a-z]{2,7}[.]{1}+[a-z]{2,6}";
+        String valid = "^[a-zA-Z0-9.]{1,}[@]{1}[a-z]{2,7}[.]{1}+[a-z]{2,6}";
         if (mail.equals("")) {
             editMail.setHintTextColor(Color.RED);
             editMail.setHint("write email !");

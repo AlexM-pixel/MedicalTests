@@ -16,4 +16,17 @@
     <string name="insert">войти</string>
     <string name="signup">регистрация</string>
     <string name="pol">выберите пол:</string>
+    <string name="home">дом</string>
+    <string name="my_tests">мои тесты</string>
+    <string name="my_account">аккаунт</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="age">дата рождения</string>
+    <string name="weight">ваш вес</string>
+    <string name="sex">выберите пол:</string>
+    <string name="m">M</string>
+    <string name="w">Ж</string>
+    <string name="name">name</string>
 </resources>

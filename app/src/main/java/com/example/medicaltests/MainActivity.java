@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.medicaltests.dialogues.RecoveryDialog;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText fragmentName;
     boolean swipeSignIn;
     FragmentManager fragmentManager;
+    Switch aSwitch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ProgressBar.setVisibility(View.INVISIBLE);
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Intent intent = new Intent(this, SpisokActivity.class);
+            Intent intent = new Intent(this, Activity2Main.class);
             startActivityForResult(intent, 1);
         }
 
@@ -175,8 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fragmentEmail = findViewById(R.id.fieldEmail_fragment);
                     fragmentPassword = findViewById(R.id.fieldPassword_fragment);
                     fragmentName = findViewById(R.id.name_fragment);
+                    aSwitch= findViewById(R.id.switch_sex);                                                 // возможно не сюда
                     createAccount(fragmentEmail.getText().toString(), fragmentPassword.getText().toString());
-
                 }
                 break;
             case R.id.signIn_Button:
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return false;
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     public void methodforswipe() {                                // добавил чтобы только в этой активити срабатывал свайп

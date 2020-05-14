@@ -3,102 +3,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/radius"
     android:orientation="vertical"
     tools:context=".AuthFragment">
 
     <EditText
         android:id="@+id/name_fragment"
-        android:background="@drawable/text_edit_radius"
-        android:padding="14dp"
-        android:elevation="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         android:layout_marginTop="18dp"
-        android:hint="name"/>
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/text_edit_radius"
+        android:elevation="8dp"
+        android:hint="@string/name"
+        android:padding="14dp" />
 
     <EditText
         android:id="@+id/fieldEmail_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         android:layout_marginTop="28dp"
-        android:padding="14dp"
-        android:elevation="8dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/text_edit_radius"
+        android:elevation="8dp"
         android:hint="@string/email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:padding="14dp" />
 
     <EditText
 
         android:id="@+id/fieldPassword_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp"
-        android:elevation="8dp"
-        android:background="@drawable/text_edit_radius"
         android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/text_edit_radius"
+        android:elevation="8dp"
         android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="14dp" />
+
+    <Switch
+        android:id="@+id/switch_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="96dp"
+        android:textColor="#ffff"
+        android:showText="true"
+        android:text="@string/sex"
+        android:textOff="@string/m"
+        android:textOn="@string/w"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_marginTop="18dp"
-            android:layout_width="wrap_content"
+            android:id="@+id/date_picker"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/pol"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/age"
             android:textColor="#ffff"
-            android:layout_gravity="center"
-            android:textSize="28sp"/>
-<RadioGroup
-    android:id="@+id/radioButton"
-    android:layout_gravity="center_horizontal"
-    android:layout_width="wrap_content"
-    android:orientation="horizontal"
-    android:layout_height="wrap_content">
+            android:textSize="18sp" />
 
-    <RadioButton
-        android:id="@+id/radio_red"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
-        android:layout_weight="1"
-         />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/weight"
+            android:textColor="#ffff"
+            android:textSize="18sp" />
 
-    <RadioButton
-        android:id="@+id/radio_blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_weight="1" />
-</RadioGroup>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-   <TextView
-       android:layout_width="0dp"
-       android:layout_weight="1"
-       android:layout_height="wrap_content"
-       android:text="тут будет дата рождения заноситься"
-       android:textSize="18sp"
-       android:layout_margin="8dp"
-       android:textColor="#ffff"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text=" a тут надо будет вес вводить"
-        android:textSize="18sp"
-        android:layout_margin="8dp"
-        android:textColor="#ffff"/>
-
-</LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>
