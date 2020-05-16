@@ -23,15 +23,7 @@ public class Activity2Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spisok);
-//        Button buttonOut= findViewById(R.id.button_out);
-//        buttonOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseAuth.getInstance().signOut();
-//                setResult(RESULT_CANCELED);
-//                finish();
-//            }
-//        });
+
         if (savedInstanceState == null) {
             fr = getSupportFragmentManager();
             ft = fr.beginTransaction();

@@ -12,22 +12,21 @@ import com.example.medicaltests.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "medDB";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     // table alltests
     public static final String TABLE_NAME = "alltests";
     private static final String KEY_ID = "_id";
     public static final String TEST_NAME = "test_name";
     public static final String TEST_IMAGE = "image_analys";
     // table userAccount
-    public static final String TABLE_NAME_USER = "userAccount";
+    public static final String TABLE_NAME_USER = "user_profil";
     private static final String KEY_ID_USER = "_id";
     public static final String NAME_USER = "user_name";
-    public static final String SURNAME_USER = "user_surname";
-    public static final String AGE_USER = "user_surname";
-    public static final String WEIGHT_USER = "user_surname";
-    public static final String SEX_USER = "user_surname";
-    public static final String EMAIL_USER = "user_surname";
-    public static final String PASSWORD_USER = "user_surname";
+    public static final String AGE_USER = "user_age";
+    public static final String WEIGHT_USER = "user_weight";
+    public static final String SEX_USER = "user_sex";
+    public static final String EMAIL_USER = "user_email";
+    public static final String PASSWORD_USER = "user_pasword";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -38,23 +37,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Create table " + TABLE_NAME
                 + "("
                 + KEY_ID + " integer PRIMARY KEY AUTOINCREMENT,"
-                + TEST_NAME + " TEXT,"
-                + TEST_IMAGE + " INTEGER" + ")");
-        insertAnalys(db, "Общий анализ крови", R.drawable.true_blood);
-        insertAnalys(db, "Гормоны щитовидной железы", R.drawable.butterfly);
-        insertAnalys(db, "Биохимический анализ крови", R.drawable.icons_blood48);
-        insertAnalys(db, "Общий анализ мочи", R.drawable.mocha);
-        insertAnalys(db, "Углеводный обмен", R.drawable.uglevodi);
-        insertAnalys(db, "Почечные пробы", R.drawable.pochka);
-        insertAnalys(db, "Липидограмма", R.drawable.lipidogramma);
-        insertAnalys(db, "Маркеры костной ткани", R.drawable.bone);
+                + TEST_NAME + " TEXT" + ")");
+
+        insertAnalys(db, "Общий анализ крови");
+        insertAnalys(db, "Гормоны щитовидной железы");
+        insertAnalys(db, "Биохимический анализ крови");
+        insertAnalys(db, "Общий анализ мочи");
+        insertAnalys(db, "Углеводный обмен");
+        insertAnalys(db, "Почечные пробы");
+        insertAnalys(db, "Липидограмма");
+        insertAnalys(db, "Маркеры костной ткани");
 
         db.execSQL("Create table " + TABLE_NAME_USER
                 + "("
                 + KEY_ID_USER + " integer PRIMARY KEY AUTOINCREMENT,"
                 + NAME_USER + " TEXT,"
-                + SURNAME_USER + " TEXT,"
-                + AGE_USER + " INTEGER,"
+                 + AGE_USER + " INTEGER,"
                 + WEIGHT_USER + " INTEGER,"
                 + SEX_USER + " TEXT,"
                 + EMAIL_USER + " TEXT,"
@@ -68,10 +66,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    private static void insertAnalys(SQLiteDatabase db, String testName, int imageId) {
+    private static void insertAnalys(SQLiteDatabase db, String testName) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TEST_NAME, testName);
-        contentValues.put(TEST_IMAGE, imageId);
         db.insert(TABLE_NAME, null, contentValues);
     }
 }

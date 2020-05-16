@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/radius"
     android:orientation="vertical"
     tools:context=".AuthFragment">
@@ -80,13 +79,16 @@
             android:textColor="#ffff"
             android:textSize="18sp" />
 
-        <TextView
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/weight"
             android:textColor="#ffff"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:inputType="numberDecimal"
             android:textSize="18sp" />
 
     </LinearLayout>

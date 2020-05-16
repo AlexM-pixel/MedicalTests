@@ -12,8 +12,6 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
     }
 
-
-
     @Override
     public void onBackPressed() {
         setResult(RESULT_OK);

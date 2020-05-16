@@ -55,11 +55,13 @@ public class SpisokFragment extends Fragment {
         try {
             db = allTestsBdHelper.getReadableDatabase();
             cursor = db.query(DatabaseHelper.TABLE_NAME,
-                    new String[]{DatabaseHelper.TEST_NAME, DatabaseHelper.TEST_IMAGE},
+                    new String[]{DatabaseHelper.TEST_NAME},
                     null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 do {
-                    cardViewArrayList.add(new AnalysCardView(cursor.getString(0), cursor.getInt(1)));
+                    String testName = cursor.getString(0);                       // получил название теста из базы
+                    int imageRes = AnalysTypes.method(testName);            // сравнил со значением в enum, нашел нужный и взял у него ресурс на изображение
+                    cardViewArrayList.add(new AnalysCardView(testName, imageRes));
                 } while (cursor.moveToNext());
             }
         } catch (SQLException e) {

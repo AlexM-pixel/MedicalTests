@@ -18,7 +18,7 @@
     <string name="pol">выберите пол:</string>
     <string name="home">дом</string>
     <string name="my_tests">мои тесты</string>
-    <string name="my_account">аккаунт</string>
+    <string name="my_account">профиль</string>
     <string name="title_activity_main3">Main3Activity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorPrimary"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="176dp"
-        android:text="Account Fragment"
+        android:layout_marginBottom="472dp"
+        android:text="@string/EnterName"
         android:textColor="#ffff"
         android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -26,9 +24,50 @@
         android:layout_height="wrap_content"
         android:padding="18dp"
         android:text="выйти из аккаунта"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.031" />
+
+    <TextView
+        android:id="@+id/textView_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_margin="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
+
+    <TextView
+        android:id="@+id/textView_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_margin="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView_email"
+        app:layout_constraintStart_toStartOf="@+id/textView_email"
+        app:layout_constraintTop_toBottomOf="@+id/textView_email" />
+
+    <TextView
+        android:id="@+id/textView_old"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_margin="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView_sex"
+        app:layout_constraintStart_toStartOf="@+id/textView_sex"
+        app:layout_constraintTop_toBottomOf="@+id/textView_sex" />
+
+    <TextView
+        android:id="@+id/textView_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_margin="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView_old"
+        app:layout_constraintStart_toStartOf="@+id/textView_old"
+        app:layout_constraintTop_toBottomOf="@+id/textView_old" />
 </androidx.constraintlayout.widget.ConstraintLayout>
