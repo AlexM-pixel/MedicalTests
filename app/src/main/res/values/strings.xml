@@ -29,4 +29,7 @@
     <string name="m">M</string>
     <string name="w">Ж</string>
     <string name="name">name</string>
+    <string name="man">мужской</string>
+    <string name="save_change">сохранить изменения</string>
+    <string name="insert_email">введите почтовый адрес для восстановления пароля</string>
 </resources>

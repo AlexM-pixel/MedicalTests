@@ -39,7 +39,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/show_menu"
+        android:id="@+id/view_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/radius_formenu"

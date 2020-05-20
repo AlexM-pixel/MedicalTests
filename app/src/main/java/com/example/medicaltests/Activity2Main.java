@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.medicaltests.account.AccountFragment;
 import com.example.medicaltests.all_analysis.SpisokFragment;
@@ -23,7 +24,6 @@ public class Activity2Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spisok);
-
         if (savedInstanceState == null) {
             fr = getSupportFragmentManager();
             ft = fr.beginTransaction();

@@ -7,7 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -17,10 +21,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medicaltests.dialogues.RecoveryDialog;
+import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,19 +37,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String MAIL = "email";
     int count = 0;
     float x1, x2, y1, y2;
-    private EditText emailField;
-    private EditText mPasswordField;
+    private EditText emailSignInMenu;
+    private EditText passwordSignInMenu;
     ProgressBar ProgressBar;
     FirebaseAuth mAuth;
     FragmentManager fm;
     LinearLayout liner_signIn;
-    LinearLayout show_menu;
-    EditText fragmentEmail;
-    EditText fragmentPassword;
-    EditText fragmentName;
+    LinearLayout showMenuLayout;
+    EditText emailCreateMenu;
+    EditText passwordCreateMenu;
+    EditText nameCreateMenu;
     boolean swipeSignIn;
-    FragmentManager fragmentManager;
-    Switch aSwitch;
+    TextView sex;
+    TextView displayDate;
+    TextView weightUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,14 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         ProgressBar = findViewById(R.id.progressBar);
-        emailField = findViewById(R.id.fieldEmail);
-        mPasswordField = findViewById(R.id.fieldPassword);
-        show_menu = findViewById(R.id.show_menu);
+        emailSignInMenu = findViewById(R.id.fieldEmail);
+        passwordSignInMenu = findViewById(R.id.fieldPassword);
+        showMenuLayout = findViewById(R.id.view_menu);
         liner_signIn = findViewById(R.id.liner_for_signIn);
         findViewById(R.id.signIn_Button).setOnClickListener(this);
         findViewById(R.id.signUp_Button).setOnClickListener(this);
-        fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.findFragmentByTag("fragment") != null) {
+        fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag("fragment") != null) {
             liner_signIn.setVisibility(View.GONE);
             methodforswipe();
         }
@@ -76,22 +82,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void createAccount(String email, String password) {
-        if (!Validation.getInstance().validEmail(email, fragmentEmail)) {
+    private void createAccount(String email, String password) {                                   // start create account
+        if (!Validation.getInstance().validEmail(email, emailCreateMenu)) {
             return;
         }
-        if (!Validation.getInstance().validPassword(password, fragmentPassword, fm)) {
+        if (!Validation.getInstance().validPassword(password, passwordCreateMenu, fm)) {
             return;
         }
         ProgressBar.setVisibility(View.VISIBLE);
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            savingUserProfil();
                             updateUI();
 
                         } else {
@@ -110,12 +116,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void signIn(final String email, String password) {
 
         if (email.equals("")) {
-            emailField.setHintTextColor(Color.RED);
-            emailField.setHint("write email !");
+            emailSignInMenu.setHintTextColor(Color.RED);
+            emailSignInMenu.setHint("write email !");
         }
         if (password.equals("")) {
-            mPasswordField.setHintTextColor(Color.RED);
-            mPasswordField.setHint("write password !");
+            passwordSignInMenu.setHintTextColor(Color.RED);
+            passwordSignInMenu.setHint("write password !");
         } else {
             ProgressBar.setVisibility(View.VISIBLE);
             // [START sign_in_with_email]
@@ -132,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Toast.makeText(MainActivity.this, "Ошибка Авторизации",
                                         Toast.LENGTH_SHORT).show();
                                 count++;
-                                if (count == 3) {       //если пароль или почта введены не правильно 3 раза подряд
+                                if (count == 3) {                                               //если пароль или почта введены не правильно 3 раза подряд
                                     RecoveryDialog recoveryDialog = new RecoveryDialog();
                                     Bundle agruments = new Bundle();
-                                    agruments.putString(MAIL, email);                   // передал адрес почты через аргументы
+                                    agruments.putString(MAIL, email);                         // передал адрес почты через аргументы
                                     recoveryDialog.setArguments(agruments);
                                     recoveryDialog.show(fm, "passw");
                                 }
@@ -170,25 +176,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signUp_Button:
-                if (liner_signIn.getVisibility() == View.VISIBLE) {                                       //проверка , что кнопка уже была нажата
-                    //    liner_signIn.setVisibility(View.GONE);
+                if (liner_signIn.getVisibility() == View.VISIBLE) {                               //  проверка , что кнопка уже была нажата
                     startAnimationMethod();
                 } else {
-                    fragmentEmail = findViewById(R.id.fieldEmail_fragment);
-                    fragmentPassword = findViewById(R.id.fieldPassword_fragment);
-                    fragmentName = findViewById(R.id.name_fragment);
-                    aSwitch= findViewById(R.id.switch_sex);                                                 // возможно не сюда
-                    createAccount(fragmentEmail.getText().toString(), fragmentPassword.getText().toString());
+                    emailCreateMenu = findViewById(R.id.fieldEmail_fragment);                       //  почта
+                    passwordCreateMenu = findViewById(R.id.fieldPassword_fragment);                 //  пароль
+                    nameCreateMenu = findViewById(R.id.name_fragment);                              //  имя
+                    sex = findViewById(R.id.switch_sex);                                          //  пол
+                    displayDate = findViewById(R.id.date_picker);                                 //  дата
+                    weightUser = findViewById(R.id.weightUser);                                   //  вес
+                    createAccount(emailCreateMenu.getText().toString(), passwordCreateMenu.getText().toString());
                 }
                 break;
             case R.id.signIn_Button:
-                signIn(emailField.getText().toString(), mPasswordField.getText().toString());
+                signIn(emailSignInMenu.getText().toString(), passwordSignInMenu.getText().toString());
                 break;
         }
     }
 
     private void startAnimationMethod() {
-        swipeSignIn = false;               // пока переменная false свайп не работает
+        swipeSignIn = false;                   // пока переменная false свайп не работает
         final Animation hide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.menu_sign_in_close);
         hide.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -199,10 +206,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAnimationEnd(Animation animation) {
                 liner_signIn.setVisibility(View.GONE);
-                if (fragmentManager.findFragmentByTag("fragment") == null) {
-                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                if (fm.findFragmentByTag("fragment") == null) {
+                    FragmentTransaction ft = fm.beginTransaction();
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    ft.add(R.id.frame_signUp, AuthFragment.newInstance(), "fragment");
+                    AuthFragment authFragment = AuthFragment.newInstance();
+                    ft.add(R.id.frame_signUp, authFragment, "fragment");
                     //  ft.addToBackStack(null);                     если добавлять в BackStack то после удаления фрагмента вновь он создаваться не будет
                     ft.commit();
                 }
@@ -215,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        show_menu.startAnimation(hide);
+        showMenuLayout.startAnimation(hide);
     }
 
     @Override
@@ -232,9 +240,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (y1 > y2 && y1 - y2 > Math.abs(x1 - x2)) {        // вверх должно быть больше чем вправо или влево
                         liner_signIn.setVisibility(View.VISIBLE);
                         //delete fragment
-                        if (fragmentManager.findFragmentByTag("fragment") != null) {
-                            FragmentTransaction ft = fragmentManager.beginTransaction();
-                            ft.remove(fragmentManager.findFragmentByTag("fragment")).commit();
+                        if (fm.findFragmentByTag("fragment") != null) {
+                            FragmentTransaction ft = fm.beginTransaction();
+                            ft.remove(fm.findFragmentByTag("fragment")).commit();
                         }
                     }
                     break;
@@ -247,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("ClickableViewAccessibility")
     public void methodforswipe() {                                // добавил чтобы только в этой активити срабатывал свайп
-        show_menu.setOnTouchListener(new View.OnTouchListener() {
+        showMenuLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -256,5 +264,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
+    }
+
+    void savingUserProfil() {
+        DatabaseHelper BdHelper = DatabaseHelper.getInstance();
+        Cursor cursor = null;
+        SQLiteDatabase db = null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.PASSWORD_USER, passwordCreateMenu.getText().toString());
+        contentValues.put(DatabaseHelper.EMAIL_USER, emailCreateMenu.getText().toString());
+        contentValues.put(DatabaseHelper.NAME_USER, nameCreateMenu.getText().toString());
+        contentValues.put(DatabaseHelper.SEX_USER, sex.getText().toString());
+        contentValues.put(DatabaseHelper.WEIGHT_USER, weightUser.getText().toString());
+        contentValues.put(DatabaseHelper.AGE_USER, displayDate.getText().toString());
+        try {
+            db = BdHelper.getWritableDatabase();
+            cursor = db.query(DatabaseHelper.TABLE_NAME_USER,
+                    null,
+                    null, null, null, null, null);
+            db.insert(DatabaseHelper.TABLE_NAME_USER, null, contentValues);
+        } catch (SQLException e) {
+            Toast.makeText(this, "ОЙ!", Toast.LENGTH_SHORT).show();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                db.close();
+            }
+        }
     }
 }

@@ -1,13 +1,11 @@
 package com.example.medicaltests.saveAtateSQLite;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
 
-import com.example.medicaltests.R;
+import com.example.medicaltests.contextApp.MyApp;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -17,7 +15,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "alltests";
     private static final String KEY_ID = "_id";
     public static final String TEST_NAME = "test_name";
-    public static final String TEST_IMAGE = "image_analys";
     // table userAccount
     public static final String TABLE_NAME_USER = "user_profil";
     private static final String KEY_ID_USER = "_id";
@@ -28,8 +25,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String EMAIL_USER = "user_email";
     public static final String PASSWORD_USER = "user_pasword";
 
-    public DatabaseHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    private static DatabaseHelper databaseHelper;
+
+    private DatabaseHelper() {
+        super(MyApp.context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static DatabaseHelper getInstance() {
+        if (databaseHelper == null) {
+            databaseHelper = new DatabaseHelper();
+        }
+        return databaseHelper;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "("
                 + KEY_ID_USER + " integer PRIMARY KEY AUTOINCREMENT,"
                 + NAME_USER + " TEXT,"
-                 + AGE_USER + " INTEGER,"
+                + AGE_USER + " INTEGER,"
                 + WEIGHT_USER + " INTEGER,"
                 + SEX_USER + " TEXT,"
                 + EMAIL_USER + " TEXT,"

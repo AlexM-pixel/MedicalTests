@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 
 public class SpisokFragment extends Fragment {
-    public ArrayList<AnalysCardView> cardViewArrayList;
-    AnalysisAdapter adapter;
+    private ArrayList<AnalysCardView> cardViewArrayList;
+    private AnalysisAdapter adapter;
 
     public static SpisokFragment newInstance() {
         return new SpisokFragment();
@@ -49,7 +49,7 @@ public class SpisokFragment extends Fragment {
     }
 
     private void getItemForSpisok() {
-        SQLiteOpenHelper allTestsBdHelper = new DatabaseHelper(getContext());
+        DatabaseHelper allTestsBdHelper = DatabaseHelper.getInstance();
         Cursor cursor = null;
         SQLiteDatabase db = null;
         try {
@@ -60,7 +60,7 @@ public class SpisokFragment extends Fragment {
             if (cursor.moveToFirst()) {
                 do {
                     String testName = cursor.getString(0);                       // получил название теста из базы
-                    int imageRes = AnalysTypes.method(testName);            // сравнил со значением в enum, нашел нужный и взял у него ресурс на изображение
+                    int imageRes = AnalysTypes.getImageForItem(testName);            // сравнил со значением в enum, нашел нужный и взял у него ресурс на изображение
                     cardViewArrayList.add(new AnalysCardView(testName, imageRes));
                 } while (cursor.moveToNext());
             }

@@ -24,7 +24,7 @@ public enum AnalysTypes {
         this.nameTest = nameTest;
     }
 
-    static int method(String nameTest) {
+    static int getImageForItem(String nameTest) {
         AnalysTypes[] analysTypes = AnalysTypes.values();
         AnalysTypes analysType = null;
         for (AnalysTypes type : analysTypes) {

@@ -47,7 +47,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.Analys
         private ImageView imageView;
         private TextView title;
 
-        public AnalysisHolder(CardView cardV) {
+        AnalysisHolder(CardView cardV) {
             super(cardV);
             cardView = cardV;
             imageView = cardView.findViewById(R.id.imageTest);
