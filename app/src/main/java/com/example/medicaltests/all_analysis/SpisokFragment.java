@@ -49,7 +49,7 @@ public class SpisokFragment extends Fragment {
     }
 
     private void getItemForSpisok() {
-        DatabaseHelper allTestsBdHelper = DatabaseHelper.getInstance();
+        DatabaseHelper allTestsBdHelper = new DatabaseHelper(getContext(),DatabaseHelper.DB_NAME,null,DatabaseHelper.DB_VERSION);
         Cursor cursor = null;
         SQLiteDatabase db = null;
         try {

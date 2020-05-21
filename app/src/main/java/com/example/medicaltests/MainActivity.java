@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.medicaltests.contextApp.GreenDaoApp;
+import com.example.medicaltests.db.DbOpenHelper;
 import com.example.medicaltests.dialogues.RecoveryDialog;
 import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.example.medicaltests.validation.Validation;
@@ -179,9 +181,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (liner_signIn.getVisibility() == View.VISIBLE) {                               //  проверка , что кнопка уже была нажата
                     startAnimationMethod();
                 } else {
-                    emailCreateMenu = findViewById(R.id.fieldEmail_fragment);                       //  почта
-                    passwordCreateMenu = findViewById(R.id.fieldPassword_fragment);                 //  пароль
-                    nameCreateMenu = findViewById(R.id.name_fragment);                              //  имя
+                    emailCreateMenu = findViewById(R.id.fieldEmail_fragment);                     //  почта
+                    passwordCreateMenu = findViewById(R.id.fieldPassword_fragment);               //  пароль
+                    nameCreateMenu = findViewById(R.id.name_fragment);                            //  имя
                     sex = findViewById(R.id.switch_sex);                                          //  пол
                     displayDate = findViewById(R.id.date_picker);                                 //  дата
                     weightUser = findViewById(R.id.weightUser);                                   //  вес
@@ -252,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     public void methodforswipe() {                                // добавил чтобы только в этой активити срабатывал свайп
         showMenuLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -267,29 +268,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void savingUserProfil() {
-        DatabaseHelper BdHelper = DatabaseHelper.getInstance();
-        Cursor cursor = null;
-        SQLiteDatabase db = null;
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.PASSWORD_USER, passwordCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.EMAIL_USER, emailCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.NAME_USER, nameCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.SEX_USER, sex.getText().toString());
-        contentValues.put(DatabaseHelper.WEIGHT_USER, weightUser.getText().toString());
-        contentValues.put(DatabaseHelper.AGE_USER, displayDate.getText().toString());
-        try {
-            db = BdHelper.getWritableDatabase();
-            cursor = db.query(DatabaseHelper.TABLE_NAME_USER,
-                    null,
-                    null, null, null, null, null);
-            db.insert(DatabaseHelper.TABLE_NAME_USER, null, contentValues);
-        } catch (SQLException e) {
-            Toast.makeText(this, "ОЙ!", Toast.LENGTH_SHORT).show();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-                db.close();
-            }
-        }
+        DaoSession daoSession = ((GreenDaoApp)getApplication()).getDaoSession();
+        String password = passwordCreateMenu.getText().toString();
+        String email = emailCreateMenu.getText().toString();
+        String name = nameCreateMenu.getText().toString();
+        String sexUser = sex.getText().toString();
+        String weight = weightUser.getText().toString();
+        String age = displayDate.getText().toString();
+        daoSession.getUserDao().insert(new User(null, name, age, email, password, weight, sexUser));
     }
 }

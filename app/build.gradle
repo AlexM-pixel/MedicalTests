@@ -1,3 +1,4 @@
+apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
@@ -24,9 +25,14 @@ android {
 
 }
 
+greendao{
+    schemaVersion 1
+    targetGenDir 'src/main/java'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

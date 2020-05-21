@@ -1,16 +1,19 @@
 package com.example.medicaltests.saveAtateSQLite;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-import com.example.medicaltests.contextApp.MyApp;
+import androidx.annotation.Nullable;
+
+import com.example.medicaltests.contextApp.GreenDaoApp;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "medDB";
-    private static final int DB_VERSION = 2;
+    public static final String DB_NAME = "medDB";
+    public static final int DB_VERSION = 2;
     // table alltests
     public static final String TABLE_NAME = "alltests";
     private static final String KEY_ID = "_id";
@@ -25,18 +28,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String EMAIL_USER = "user_email";
     public static final String PASSWORD_USER = "user_pasword";
 
-    private static DatabaseHelper databaseHelper;
 
-    private DatabaseHelper() {
-        super(MyApp.context, DB_NAME, null, DB_VERSION);
+    public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
     }
 
-    public static DatabaseHelper getInstance() {
-        if (databaseHelper == null) {
-            databaseHelper = new DatabaseHelper();
-        }
-        return databaseHelper;
-    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
