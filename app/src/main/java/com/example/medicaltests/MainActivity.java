@@ -7,11 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -25,9 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medicaltests.contextApp.GreenDaoApp;
-import com.example.medicaltests.db.DbOpenHelper;
 import com.example.medicaltests.dialogues.RecoveryDialog;
-import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -73,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mAuth = FirebaseAuth.getInstance();
         updateUI();
-        fm = getSupportFragmentManager();
     }
 
 

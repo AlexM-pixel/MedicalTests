@@ -21,17 +21,6 @@ public class User {
     private String weight;
     @Property(nameInDb = "sex")
     private String sex;
-
-//    User(long id, String name, String age, String email, String password, String weight, String sex) {
-//      this.id=id;
-//        this.nameUser = name;
-//        this.age = age;
-//        this.email = email;
-//        this.password = password;
-//        this.weight = weight;
-//        this.sex = sex;
-//    }
-
  
 
     @Generated(hash = 586692638)
@@ -68,7 +57,7 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
+    String getPassword() {
         return password;
     }
 
@@ -88,11 +77,11 @@ public class User {
         this.age = age;
     }
 
-    public void setEmail(String email) {
+    void setEmail(String email) {
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    void setPassword(String password) {
         this.password = password;
     }
 

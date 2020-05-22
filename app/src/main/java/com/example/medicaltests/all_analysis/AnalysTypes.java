@@ -25,7 +25,7 @@ public enum AnalysTypes {
     }
 
     static int getImageForItem(String nameTest) {
-        AnalysTypes[] analysTypes = AnalysTypes.values();
+        AnalysTypes[] analysTypes = AnalysTypes.values();       //получил массив значений хранящихся в данном классе
         AnalysTypes analysType = null;
         for (AnalysTypes type : analysTypes) {
             if (nameTest.equals(type.nameTest)) {

@@ -24,11 +24,8 @@ import com.example.medicaltests.User;
 import com.example.medicaltests.UserDao;
 import com.example.medicaltests.contextApp.GreenDaoApp;
 import com.example.medicaltests.db.DbOpenHelper;
-import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.greenrobot.greendao.Property;
-import org.greenrobot.greendao.query.Query;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -40,7 +37,6 @@ public class AccountFragment extends Fragment {
     private TextView weight;
     private String nameBD;
     private String ageBD;
-    private String emailBD;
     private String weightBD;
     private String sexBD;
     private String email_fromFirebase;
@@ -63,6 +59,11 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.account, container, false);
         Button buttonSave = view.findViewById(R.id.button_saveChange);
         Button button_logOut = view.findViewById(R.id.logout);
+        name = view.findViewById(R.id.textView_name);
+        email = view.findViewById(R.id.textView_email);
+        sex = view.findViewById(R.id.textView_sex);
+        age = view.findViewById(R.id.textView_old);
+        weight = view.findViewById(R.id.textView_weight);
         button_logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,11 +72,6 @@ public class AccountFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        name = view.findViewById(R.id.textView_name);
-        email = view.findViewById(R.id.textView_email);
-        sex = view.findViewById(R.id.textView_sex);
-        age = view.findViewById(R.id.textView_old);
-        weight = view.findViewById(R.id.textView_weight);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +91,7 @@ public class AccountFragment extends Fragment {
         ageBD = user.getAge();
         weightBD = user.getWeight();
         sexBD = user.getSex();
-        emailBD = user.getEmail();
+        String emailBD = user.getEmail();
        //editTexts
         name.setText(nameBD);
         email.setText(emailBD);
