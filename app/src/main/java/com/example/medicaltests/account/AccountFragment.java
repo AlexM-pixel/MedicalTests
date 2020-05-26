@@ -1,25 +1,27 @@
 package com.example.medicaltests.account;
 
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.medicaltests.R;
-import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
+import com.example.medicaltests.all_analysis.SpisokFragment;
+import com.example.medicaltests.all_analysis.Test;
+import com.example.medicaltests.all_analysis.TestDao;
+import com.example.medicaltests.saveAtateSQLite.MyAppDatabase;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -29,13 +31,12 @@ public class AccountFragment extends Fragment {
     private TextView sex;
     private TextView age;
     private TextView weight;
-    private DatabaseHelper BdHelper = DatabaseHelper.getInstance();
     private String nameBD;
     private String ageBD;
-    private String emailBD;
     private String weightBD;
     private String sexBD;
     private String email_fromFirebase;
+    private User user;
 
     public static AccountFragment newInstance() {
         return new AccountFragment();
@@ -79,64 +80,65 @@ public class AccountFragment extends Fragment {
     }
 
     private void displayProfilValues() {
-        Cursor cursor = null;
-        SQLiteDatabase db = null;
+        UserDbAsync userDbAsync = new UserDbAsync(MyAppDatabase.getInstance());
+        userDbAsync.execute(email_fromFirebase);
         try {
-            db = BdHelper.getReadableDatabase();
-            cursor = db.query(DatabaseHelper.TABLE_NAME_USER,
-                    new String[]{DatabaseHelper.NAME_USER, DatabaseHelper.AGE_USER, DatabaseHelper.WEIGHT_USER, DatabaseHelper.SEX_USER, DatabaseHelper.EMAIL_USER},
-                    DatabaseHelper.EMAIL_USER+" = ?",new String[]{email_fromFirebase}, null, null, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    nameBD = cursor.getString(0);
-                    ageBD = cursor.getString(1);
-                    weightBD = cursor.getString(2);
-                    sexBD = cursor.getString(3);
-                    emailBD = cursor.getString(4);
-                    name.setText(nameBD);
-                    email.setText(emailBD);
-                    sex.setText(sexBD);
-                    age.setText(ageBD);
-                    weight.setText(weightBD);
-                } while (cursor.moveToNext());
-            }
-        } catch (SQLException e) {
-            Toast.makeText(getContext(), "ОЙ!", Toast.LENGTH_SHORT).show();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-                db.close();
-            }
+            user = userDbAsync.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+   //  AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().findUserByEmail(email_fromFirebase));
+
+        if (user!=null) {
+            nameBD = user.getNameUser();
+            ageBD = user.getAge();
+            weightBD = user.getWeight();
+            sexBD = user.getSex();
+            String emailBD = user.getEmail();
+            //editTexts
+            name.setText(nameBD);
+            email.setText(emailBD);
+            sex.setText(sexBD);
+            age.setText(ageBD);
+            weight.setText(weightBD);
         }
     }
 
     private void saveChangeProfilValues() {
-        SQLiteDatabase db = null;
-        ContentValues contentValues = new ContentValues();
         if (!nameBD.equals(name.getText().toString())) {
-            contentValues.put(DatabaseHelper.NAME_USER, name.getText().toString());
-        }
-        if (!emailBD.equals(email.getText().toString())) {
-            contentValues.put(DatabaseHelper.EMAIL_USER, email.getText().toString());
+            user.setNameUser(name.getText().toString());
         }
         if (!sexBD.equals(sex.getText().toString())) {
-            contentValues.put(DatabaseHelper.SEX_USER, sex.getText().toString());
+            user.setSex(sex.getText().toString());
         }
         if (!weightBD.equals(weight.getText().toString())) {
-            contentValues.put(DatabaseHelper.WEIGHT_USER, weight.getText().toString());
+            user.setWeight(weight.getText().toString());
         }
         if (!ageBD.equals(age.getText().toString())) {
-            contentValues.put(DatabaseHelper.AGE_USER, age.getText().toString());
+            user.setAge(age.getText().toString());
         }
-        try {
-            db = BdHelper.getWritableDatabase();
-            db.update(DatabaseHelper.TABLE_NAME_USER, contentValues, DatabaseHelper.EMAIL_USER +"=?", new String[]{email_fromFirebase});
+        AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().update(user));
 
-        } catch (SQLException e) {
-            Toast.makeText(getContext(), "ОЙ!", Toast.LENGTH_SHORT).show();
-        } finally {
-            assert db != null;
-            db.close();
+    }
+
+    private static class UserDbAsync extends AsyncTask<String, Void, User> {
+        private final UserDao userDao;
+
+        private UserDbAsync(MyAppDatabase instance) {
+            this.userDao = instance.userDao();
+        }
+
+        @Override
+        protected User doInBackground(String... strings) {
+            return userDao.findUserByEmail(strings[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // тут крутелку загрузки можно добавить
         }
     }
 }

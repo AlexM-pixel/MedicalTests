@@ -7,12 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,14 +21,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.medicaltests.account.User;
+import com.example.medicaltests.account.UserDao;
+import com.example.medicaltests.all_analysis.SpisokFragment;
+import com.example.medicaltests.all_analysis.Test;
+import com.example.medicaltests.all_analysis.TestDao;
 import com.example.medicaltests.dialogues.RecoveryDialog;
-import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
+import com.example.medicaltests.saveAtateSQLite.MyAppDatabase;
 import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String MAIL = "email";
@@ -267,29 +274,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void savingUserProfil() {
-        DatabaseHelper BdHelper = DatabaseHelper.getInstance();
-        Cursor cursor = null;
-        SQLiteDatabase db = null;
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.PASSWORD_USER, passwordCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.EMAIL_USER, emailCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.NAME_USER, nameCreateMenu.getText().toString());
-        contentValues.put(DatabaseHelper.SEX_USER, sex.getText().toString());
-        contentValues.put(DatabaseHelper.WEIGHT_USER, weightUser.getText().toString());
-        contentValues.put(DatabaseHelper.AGE_USER, displayDate.getText().toString());
-        try {
-            db = BdHelper.getWritableDatabase();
-            cursor = db.query(DatabaseHelper.TABLE_NAME_USER,
-                    null,
-                    null, null, null, null, null);
-            db.insert(DatabaseHelper.TABLE_NAME_USER, null, contentValues);
-        } catch (SQLException e) {
-            Toast.makeText(this, "ОЙ!", Toast.LENGTH_SHORT).show();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-                db.close();
-            }
+        String password = passwordCreateMenu.getText().toString();
+        String email = emailCreateMenu.getText().toString();
+        String name = nameCreateMenu.getText().toString();
+        String sexUser = sex.getText().toString();
+        String weight = weightUser.getText().toString();
+        String age = displayDate.getText().toString();
+        User user = new User(null, name, age, email, password, weight, sexUser);
+     //    MyAppDatabase.getInstance().userDao().insert(new User(null,name, age, email, password, weight, sexUser));
+      //  AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().insert(user));
+       UserDbAsync userDbAsync = new UserDbAsync(MyAppDatabase.getInstance());
+        userDbAsync.execute(user);
+    }
+    private static class UserDbAsync extends AsyncTask<User, Void, Integer> {
+        private final UserDao userDao;
+
+        private UserDbAsync(MyAppDatabase instance) {
+            this.userDao = instance.userDao();
         }
+        @Override
+        protected Integer doInBackground(User... users) {
+           userDao.insert(users[0]);
+            return 0;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // тут крутелку загрузки можно добавить
+        }
+
+
     }
 }
