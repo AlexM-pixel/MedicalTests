@@ -51,7 +51,7 @@ public class SpisokFragment extends Fragment {
         //  List<Test> testList = MyAppDatabase.getInstance().testDao().getAll();
         UserDbAsync userDbAsync = new UserDbAsync(MyAppDatabase.getInstance());
         userDbAsync.execute();
-        List<Test> testList= null;
+        List<Test> testList = null;
         try {
             testList = userDbAsync.get();
         } catch (ExecutionException e) {
@@ -64,10 +64,9 @@ public class SpisokFragment extends Fragment {
             int imageRes = AnalysTypes.getImageForItem(testName);            // сравнил со значением в enum, нашел нужный и взял у него ресурс на изображение
             cardViewArrayList.add(new AnalysCardView(testName, imageRes));
         }
-
     }
 
-    private static class  UserDbAsync extends AsyncTask<Void, Void, List<Test>> {
+    private static class UserDbAsync extends AsyncTask<Void, Void, List<Test>> {
         private final TestDao testDao;
 
         private UserDbAsync(MyAppDatabase instance) {

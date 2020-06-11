@@ -17,6 +17,8 @@ import com.example.medicaltests.R;
 import com.example.medicaltests.all_analysis.SpisokFragment;
 import com.example.medicaltests.all_analysis.Test;
 import com.example.medicaltests.all_analysis.TestDao;
+import com.example.medicaltests.saveAtateSQLite.AdapterDB;
+import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.example.medicaltests.saveAtateSQLite.MyAppDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -37,6 +39,7 @@ public class AccountFragment extends Fragment {
     private String sexBD;
     private String email_fromFirebase;
     private User user;
+    AdapterDB adapterDB;
 
     public static AccountFragment newInstance() {
         return new AccountFragment();
@@ -80,18 +83,10 @@ public class AccountFragment extends Fragment {
     }
 
     private void displayProfilValues() {
-        UserDbAsync userDbAsync = new UserDbAsync(MyAppDatabase.getInstance());
-        userDbAsync.execute(email_fromFirebase);
-        try {
-            user = userDbAsync.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-   //  AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().findUserByEmail(email_fromFirebase));
-
-        if (user!=null) {
+        adapterDB = new AdapterDB(DatabaseHelper.getInstance());                 // sqlite
+        //   adapterDB = new AdapterDB(MyAppDatabase.getInstance());                  // room
+        user = adapterDB.select(email_fromFirebase);
+        if (user != null) {
             nameBD = user.getNameUser();
             ageBD = user.getAge();
             weightBD = user.getWeight();
@@ -119,26 +114,7 @@ public class AccountFragment extends Fragment {
         if (!ageBD.equals(age.getText().toString())) {
             user.setAge(age.getText().toString());
         }
-        AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().update(user));
+        adapterDB.update(user);
 
-    }
-
-    private static class UserDbAsync extends AsyncTask<String, Void, User> {
-        private final UserDao userDao;
-
-        private UserDbAsync(MyAppDatabase instance) {
-            this.userDao = instance.userDao();
-        }
-
-        @Override
-        protected User doInBackground(String... strings) {
-            return userDao.findUserByEmail(strings[0]);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // тут крутелку загрузки можно добавить
-        }
     }
 }

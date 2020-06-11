@@ -36,7 +36,7 @@ public abstract class MyAppDatabase extends RoomDatabase {
                                     new UserDbAsync(INSTANCE).execute();
                                 }
                             })
-                      //      .allowMainThreadQueries()
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

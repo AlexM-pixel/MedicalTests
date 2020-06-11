@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,6 +28,8 @@ import com.example.medicaltests.all_analysis.SpisokFragment;
 import com.example.medicaltests.all_analysis.Test;
 import com.example.medicaltests.all_analysis.TestDao;
 import com.example.medicaltests.dialogues.RecoveryDialog;
+import com.example.medicaltests.saveAtateSQLite.AdapterDB;
+import com.example.medicaltests.saveAtateSQLite.DatabaseHelper;
 import com.example.medicaltests.saveAtateSQLite.MyAppDatabase;
 import com.example.medicaltests.validation.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -281,28 +284,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String weight = weightUser.getText().toString();
         String age = displayDate.getText().toString();
         User user = new User(null, name, age, email, password, weight, sexUser);
-     //    MyAppDatabase.getInstance().userDao().insert(new User(null,name, age, email, password, weight, sexUser));
-      //  AsyncTask.execute(() -> MyAppDatabase.getInstance().userDao().insert(user));
-       UserDbAsync userDbAsync = new UserDbAsync(MyAppDatabase.getInstance());
-        userDbAsync.execute(user);
-    }
-    private static class UserDbAsync extends AsyncTask<User, Void, Integer> {
-        private final UserDao userDao;
+       // AdapterDB adapterDB = new AdapterDB(MyAppDatabase.getInstance());
+        AdapterDB adapterDB = new AdapterDB(DatabaseHelper.getInstance());
 
-        private UserDbAsync(MyAppDatabase instance) {
-            this.userDao = instance.userDao();
-        }
-        @Override
-        protected Integer doInBackground(User... users) {
-           userDao.insert(users[0]);
-            return 0;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // тут крутелку загрузки можно добавить
-        }
-
-
+        adapterDB.insert(user);
     }
 }
